@@ -8,7 +8,7 @@ type Player struct {
 func NewPlayer(playerName string, id int) *Player {
 	return &Player{
 		playerName: playerName,
-		id:         id,
+		id:         id
 	}
 }
 

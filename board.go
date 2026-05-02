@@ -27,7 +27,13 @@ func (gb *GameBoard) startGame() {
 	for len(gb.nextTurn) > 1 {
 		player := gb.nextTurn[0]
 		gb.nextTurn = gb.nextTurn[1:]
+
 		currentPosition := gb.playersCurrentPosition[player.getPlayerName()]
+
+		go func() {
+			fmt.Printf("Trace: %s moving from %d\n", player.getPlayerName(), currentPosition)
+		}()
+
 		diceValue := gb.dice.rollDice()
 		nextCell := currentPosition + diceValue
 
@@ -37,7 +43,7 @@ func (gb *GameBoard) startGame() {
 			fmt.Println(player.getPlayerName(), "won the game")
 		} else {
 			nextPosition := nextCell
-			b := false
+			foundSpecial := false
 
 			for _, v := range gb.snakes {
 				if v.startPoint == nextCell {
@@ -52,11 +58,11 @@ func (gb *GameBoard) startGame() {
 			for _, v := range gb.ladders {
 				if v.startPoint == nextCell {
 					nextPosition = v.endPoint
-					b = true
+					foundSpecial = true
 				}
 			}
 
-			if nextPosition != nextCell && b {
+			if nextPosition != nextCell && foundSpecial {
 				fmt.Println(player.getPlayerName(), "Got ladder present at:", nextCell)
 			}
 
